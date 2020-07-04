@@ -1,0 +1,3 @@
+[console_scripts]
+qorontine = qorontine.game:main
+

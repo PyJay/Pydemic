@@ -1,21 +1,25 @@
 import random
 import arcade
+import pkg_resources
+
 
 # --- Constants ---
-SPRITE_SCALING_PLAYER = 0.075
-SPRITE_SCALING_QoronA = 0.2
+SPRITE_SCALING_PLAYER = 0.5
+SPRITE_SCALING_QORONA = 0.2
 SPRITE_SCALING_BOG_ROLL = 0.1
 SPRITE_SCALING_LASER = 0.8
 ROLL_COUNT = 25
-PATIENT_SCALING = 0.1
+PATIENT_SCALING = 0.5
 BULLET_SPEED = 5
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
-SCREEN_TITLE = "Qorontine"
+SCREEN_TITLE = "Qorona"
 
 MOVEMENT_SPEED = 1.5
 
+bog_roll = pkg_resources.resource_filename("qorontine", "data/bog_roll.png")
+dojo = ":resources:images/animated_characters/female_adventurer/femaleAdventurer_walk1.png"
 
 class StageOneMenu(arcade.View):
     def on_show(self):
@@ -296,7 +300,7 @@ class StageOne(StageBase):
 
         # Set up the player
         # Character image from kenney.nl
-        self.player_sprite = Player("bojo.png",
+        self.player_sprite = Player(dojo,
                                     SPRITE_SCALING_PLAYER)
         self.player_sprite.center_x = 50
         self.player_sprite.center_y = 50
@@ -306,7 +310,7 @@ class StageOne(StageBase):
         for _ in range(ROLL_COUNT):
             # Create the coin instance
             # Coin image from kenney.nl
-            coin = arcade.Sprite("bog_roll.png",
+            coin = arcade.Sprite(bog_roll,
                                  SPRITE_SCALING_BOG_ROLL)
 
             # Position the coin
@@ -393,7 +397,7 @@ class StageTwo(StageBase):
 
             # Create the patient instance
             patient = FallingPatient(
-                "patient.png", PATIENT_SCALING)
+                ":resources:images/animated_characters/zombie/zombie_walk0.png", PATIENT_SCALING)
 
             # Position the patient
             patient.center_x = random.randrange(SCREEN_WIDTH)
@@ -408,7 +412,7 @@ class StageTwo(StageBase):
 
             # Create the coin instance
             patient = RisingPatient(
-                "patient.png", PATIENT_SCALING)
+                ":resources:images/animated_characters/zombie/zombie_walk0.png", PATIENT_SCALING)
 
             # Position the coin
             patient.center_x = random.randrange(SCREEN_WIDTH)
@@ -428,7 +432,7 @@ class StageTwo(StageBase):
         self.patient_list = arcade.SpriteList()
 
         # Set up the player
-        self.player_sprite = Player("bojo.png",
+        self.player_sprite = Player(dojo,
                                     SPRITE_SCALING_PLAYER)
         self.player_sprite.center_x = 50
         self.player_sprite.center_y = 50
@@ -529,7 +533,7 @@ class StageThree(arcade.View):
         self.score = 0
 
         # Image from kenney.nl
-        self.player_sprite = Player("bojo.png",
+        self.player_sprite = Player(dojo,
                                     SPRITE_SCALING_PLAYER)
         self.player_sprite.center_x = 50
         self.player_sprite.center_y = 70
@@ -541,7 +545,7 @@ class StageThree(arcade.View):
             # Create the coin instance
             # Coin image from kenney.nl
             Qorona = FallingPatient(
-                ":resources:images/enemies/saw.png", SPRITE_SCALING_QoronA)
+                ":resources:images/enemies/saw.png", SPRITE_SCALING_QORONA)
             Qorona.speed = 0.5
 
             # Position the coin

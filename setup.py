@@ -1,13 +1,14 @@
 from setuptools import setup
 
 setup(
-    name='Quorontine',
+    name='Qorona',
     version='0.1dev',
-    packages=['qorontine',],
+    packages=['qorona',],
     long_description=open('README.md').read(),
     install_requires=['arcade'],
     entry_points={
         "console_scripts": [
-            "qorontine=qorontine.game:main",
-        ],}
+            "qorona=qorona.game:main",
+        ],},
+    package_data={'qorona': ['data/*.png']}
 )
