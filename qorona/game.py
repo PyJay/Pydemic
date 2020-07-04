@@ -243,7 +243,7 @@ class Player(arcade.Sprite):
 
 
 class FallingPatient(arcade.Sprite):
-    """ Simple sprite that falls down """
+    """ Simple sprite that falls down """   
     speed = 2
 
     def update(self):
@@ -264,7 +264,7 @@ class RisingPatient(arcade.Sprite):
         """ Move the coin """
         self.avoided = False
         # Move up
-        self.center_y += 2
+        self.center_y += 2.5
 
         # Did we go off the screen? If so, pop back to the bottom.
         if self.bottom > SCREEN_HEIGHT:
