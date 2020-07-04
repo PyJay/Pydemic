@@ -4,7 +4,7 @@ import arcade
 # --- Constants ---
 SPRITE_SCALING_PLAYER = 0.075
 SPRITE_SCALING_QoronA = 0.2
-SPRITE_SCALING_BOG_ROLL = 0.01
+SPRITE_SCALING_BOG_ROLL = 0.1
 SPRITE_SCALING_LASER = 0.8
 ROLL_COUNT = 25
 PATIENT_SCALING = 0.1
@@ -306,7 +306,7 @@ class StageOne(StageBase):
         for _ in range(ROLL_COUNT):
             # Create the coin instance
             # Coin image from kenney.nl
-            coin = arcade.Sprite("bog_roll_2.png",
+            coin = arcade.Sprite("bog_roll.png",
                                  SPRITE_SCALING_BOG_ROLL)
 
             # Position the coin
@@ -657,7 +657,7 @@ class StageThree(arcade.View):
 def main():
     """ Main method """
     window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    start_view = StageThreeMenu()
+    start_view = StageOneMenu()
     window.show_view(start_view)
     arcade.run()
 
