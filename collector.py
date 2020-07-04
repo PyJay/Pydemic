@@ -51,12 +51,12 @@ class GameView(arcade.View):
         self.game_over = False
         self.success = False
         # Don't show the mouse cursor
-        # self.window.set_mouse_visible(False)
 
         arcade.set_background_color(arcade.color.AMAZON)
 
     def setup(self):
         """ Set up the game and initialize the variables. """
+        self.window.set_mouse_visible(False)
 
         # Sprite lists
         self.player_list = arcade.SpriteList()
