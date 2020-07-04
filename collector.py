@@ -16,7 +16,7 @@ MOVEMENT_SPEED = 5
 class Player(arcade.Sprite):
 
     def update(self):
-        self.center_x += self.change_xó
+        self.center_x += self.change_x
         self.center_y += self.change_y
 
         if self.left < 0:
@@ -51,7 +51,7 @@ class GameView(arcade.View):
         self.game_over = False
         self.success = False
         # Don't show the mouse cursor
-        self.window.set_mouse_visible(False)
+        # self.window.set_mouse_visible(False)
 
         arcade.set_background_color(arcade.color.AMAZON)
 
