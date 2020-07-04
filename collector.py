@@ -3,9 +3,12 @@ import arcade
 
 # --- Constants ---
 SPRITE_SCALING_PLAYER = 0.075
+SPRITE_SCALING_QUORONA = 0.2
 SPRITE_SCALING_BOG_ROLL = 0.01
+SPRITE_SCALING_LASER = 0.8
 ROLL_COUNT = 25
 PATIENT_SCALING = 0.1
+BULLET_SPEED = 5
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -14,26 +17,27 @@ SCREEN_TITLE = "Quorontine"
 MOVEMENT_SPEED = 1.5
 
 
-class MenuView(arcade.View):
+class StageOneMenu(arcade.View):
     def on_show(self):
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
 
     def on_draw(self):
         arcade.start_render()
         arcade.draw_text("Welcome! The year is 2020 and a virus\n"
-        " from a distant land has reached your nation.\n"
-        "As leader of the United Queendom,\n"
-        " you must do your utmost to save the nation, Doris Johnson...", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
+                         " from a distant land has reached your nation.\n"
+                         "As leader of the United Queendom,\n"
+                         " you must do your utmost to save the nation, Doris Johnson...", SCREEN_WIDTH /
+                         2, SCREEN_HEIGHT/2,
                          arcade.color.WHITE, font_size=25, anchor_x="center")
         arcade.draw_text("..but first you need to stock up. Click to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
                          arcade.color.WHITE_SMOKE, font_size=20, anchor_x="center")
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
-        game_view = InstructionView()
-        self.window.show_view(game_view)
+        instruction_view = StageOneInstructionView()
+        self.window.show_view(instruction_view)
 
 
-class InstructionView(arcade.View):
+class StageOneInstructionView(arcade.View):
     def on_show(self):
         arcade.set_background_color(arcade.color.ORANGE_PEEL)
 
@@ -50,19 +54,35 @@ class InstructionView(arcade.View):
         self.window.show_view(game_view)
 
 
-class StageTwoView(arcade.View):
+class StageTwoMenu(arcade.View):
     def on_show(self):
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
 
     def on_draw(self):
         arcade.start_render()
         arcade.draw_text("Well done! You stocked up on essentials.\n"
-        "Alas the virus is spreading quickly.\n"
-        "Doris, you have to attend several meetings\n"
-        " but you must maintain social distancing", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
+                         "Alas quorona is spreading quickly.\n"
+                         "Doris, you have to attend several meetings\n"
+                         " but you must maintain social distancing", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
                          arcade.color.WHITE, font_size=25, anchor_x="center")
         arcade.draw_text("Click to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
                          arcade.color.WHITE_SMOKE, font_size=20, anchor_x="center")
+
+    def on_mouse_press(self, _x, _y, _button, _modifiers):
+        instruction_view = StageTwoInstructionView()
+        self.window.show_view(instruction_view)
+
+
+class StageTwoInstructionView(arcade.View):
+    def on_show(self):
+        arcade.set_background_color(arcade.color.ORANGE_PEEL)
+
+    def on_draw(self):
+        arcade.start_render()
+        arcade.draw_text("Use the arrow keys to avoid the infected!", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
+                         arcade.color.BLACK, font_size=25, anchor_x="center")
+        arcade.draw_text("Click to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
+                         arcade.color.GRAY, font_size=20, anchor_x="center")
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         game_view = StageTwo()
@@ -70,6 +90,80 @@ class StageTwoView(arcade.View):
         self.window.show_view(game_view)
 
 
+class StageThreeMenu(arcade.View):
+    def on_show(self):
+        arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
+
+    def on_draw(self):
+        arcade.start_render()
+        arcade.draw_text("You have tried your best to avoid people and attend meetings\n"
+                         "Unfortunately, you have still been infected.\n"
+                         "Doris, you must fight the disease\n"
+                         " your nation depends on you", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
+                         arcade.color.WHITE, font_size=25, anchor_x="center")
+        arcade.draw_text("Click to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
+                         arcade.color.WHITE_SMOKE, font_size=20, anchor_x="center")
+
+    def on_mouse_press(self, _x, _y, _button, _modifiers):
+        instruction_view = StageThreeInstructionView()
+        self.window.show_view(instruction_view)
+
+
+class StageThreeInstructionView(arcade.View):
+    def on_show(self):
+        arcade.set_background_color(arcade.color.ORANGE_PEEL)
+
+    def on_draw(self):
+        arcade.start_render()
+        arcade.draw_text("Use the left/right keys to move and space bar to shoot", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
+                         arcade.color.BLACK, font_size=25, anchor_x="center")
+        arcade.draw_text("Click to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
+                         arcade.color.GRAY, font_size=20, anchor_x="center")
+
+    def on_mouse_press(self, _x, _y, _button, _modifiers):
+        game_view = StageThree()
+        game_view.setup()
+        self.window.show_view(game_view)
+
+
+class SuccessView(arcade.View):
+    def __init__(self, next_stage_view):
+        super().__init__()
+        self.next_stage_menu = next_stage_view
+
+    def on_show(self):
+        arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
+
+    def on_draw(self):
+        arcade.start_render()
+        arcade.draw_text("Success!", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
+                         arcade.color.WHITE, font_size=30, anchor_x="center")
+        arcade.draw_text("Click to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
+                         arcade.color.WHITE_SMOKE, font_size=20, anchor_x="center")
+
+    def on_mouse_press(self, _x, _y, _button, _modifiers):
+        next_stage_menu = self.next_stage_menu()
+        self.window.show_view(next_stage_menu)
+
+
+class GameOverView(arcade.View):
+    # TODO: you can reset variables in the init
+    # TODO: you can add some context about where you were killed
+    def on_show(self):
+        arcade.set_background_color(arcade.color.BLACK)
+
+    def on_draw(self):
+        arcade.start_render()
+        arcade.draw_text("Game Over - you were infected", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
+                         arcade.color.WHITE, font_size=20, anchor_x="center")
+        arcade.draw_text("Click to restart", 310, 300, arcade.color.WHITE, 24)
+        # TODO: show scores here
+
+    def on_mouse_press(self, _x, _y, _button, _modifiers):
+        game_view = StageOneMenu()
+        self.window.show_view(game_view)
+
+# Sprite Players
 class Player(arcade.Sprite):
 
     def update(self):
@@ -87,7 +181,57 @@ class Player(arcade.Sprite):
             self.top = SCREEN_HEIGHT - 1
 
 
-class GameView(arcade.View):
+class FallingPatient(arcade.Sprite):
+    """ Simple sprite that falls down """
+    speed = 2
+
+    def update(self):
+        """ Move the coin """
+        self.avoided = False
+        # Fall down
+        self.center_y -= self.speed
+
+        # Did we go off the screen? If so, pop back to the top.
+        if self.top < 0:
+            self.avoided = True
+
+
+class RisingPatient(arcade.Sprite):
+    """ Simple sprite that falls up """
+
+    def update(self):
+        """ Move the coin """
+        self.avoided = False
+        # Move up
+        self.center_y += 2
+
+        # Did we go off the screen? If so, pop back to the bottom.
+        if self.bottom > SCREEN_HEIGHT:
+            self.avoided = True
+
+
+class StageBase(arcade.View):
+    def on_key_press(self, key, modifiers):
+        """Called whenever a key is pressed. """
+
+        if key == arcade.key.UP:
+            self.player_sprite.change_y = MOVEMENT_SPEED
+        elif key == arcade.key.DOWN:
+            self.player_sprite.change_y = -MOVEMENT_SPEED
+        elif key == arcade.key.LEFT:
+            self.player_sprite.change_x = -MOVEMENT_SPEED
+        elif key == arcade.key.RIGHT:
+            self.player_sprite.change_x = MOVEMENT_SPEED
+
+    def on_key_release(self, key, modifiers):
+        """Called when the user releases a key. """
+        if key == arcade.key.UP or key == arcade.key.DOWN:
+            self.player_sprite.change_y = 0
+        elif key == arcade.key.LEFT or key == arcade.key.RIGHT:
+            self.player_sprite.change_x = 0
+
+
+class GameView(StageBase):
     """ Our custom Window Class"""
 
     def __init__(self):
@@ -105,8 +249,8 @@ class GameView(arcade.View):
 
         self.time_left = 30
 
-        self.game_over = False
-        self.success = False
+        # self.game_over = False
+        # self.success = False
         # Don't show the mouse cursor
 
         arcade.set_background_color(arcade.color.AMAZON)
@@ -163,43 +307,6 @@ class GameView(arcade.View):
         output = f"Score: {self.score}"
         arcade.draw_text(output, 10, 20, arcade.color.WHITE, 14)
 
-        # Put the text on the screen.
-        output = f"GAME OVER"
-        if self.game_over:
-            arcade.draw_text(output, 400, 300, arcade.color.RED, 50)
-
-        # Put the text on the screen.
-        output = f"SUCCESS! You stocked up on essentials.\n Click to advance!"
-        if self.success:
-            arcade.draw_text(output,
-             SCREEN_HEIGHT/2,
-             SCREEN_WIDTH/2,
-             arcade.color.BLUE, 15, anchor_x='center')
-
-    def on_key_press(self, key, modifiers):
-        """Called whenever a key is pressed. """
-
-        if key == arcade.key.UP:
-            self.player_sprite.change_y = MOVEMENT_SPEED
-        elif key == arcade.key.DOWN:
-            self.player_sprite.change_y = -MOVEMENT_SPEED
-        elif key == arcade.key.LEFT:
-            self.player_sprite.change_x = -MOVEMENT_SPEED
-        elif key == arcade.key.RIGHT:
-            self.player_sprite.change_x = MOVEMENT_SPEED
-    
-    def on_mouse_press(self, *args):
-        if self.success:
-            stage_two_view = StageTwoView()
-            self.window.show_view(stage_two_view)
-
-    def on_key_release(self, key, modifiers):
-        """Called when the user releases a key. """
-
-        if key == arcade.key.UP or key == arcade.key.DOWN:
-            self.player_sprite.change_y = 0
-        elif key == arcade.key.LEFT or key == arcade.key.RIGHT:
-            self.player_sprite.change_x = 0
 
     def on_update(self, delta_time):
         """ Movement and game logic """
@@ -220,42 +327,12 @@ class GameView(arcade.View):
         self.time_left -= delta_time
 
         if int(self.time_left) % 60 <= 0 and self.score < 20:
-            self.game_over = True
+            self.window.show_view(GameOverView())
         elif int(self.time_left) % 60 > 0 and self.score >= 20:
-            self.success = True
+            self.window.show_view(SuccessView(StageTwoMenu))
 
 
-
-
-class FallingPatient(arcade.Sprite):
-    """ Simple sprite that falls down """
-
-    def update(self):
-        """ Move the coin """
-        self.avoided = False
-        # Fall down
-        self.center_y -= 2
-
-        # Did we go off the screen? If so, pop back to the top.
-        if self.top < 0:
-            self.avoided = True
-
-
-class RisingPatient(arcade.Sprite):
-    """ Simple sprite that falls up """
-
-    def update(self):
-        """ Move the coin """
-        self.avoided = False
-        # Move up
-        self.center_y += 2
-
-        # Did we go off the screen? If so, pop back to the bottom.
-        if self.bottom > SCREEN_HEIGHT:
-            self.avoided = True
-
-
-class StageTwo(arcade.View):
+class StageTwo(StageBase):
     """
     Main application class.
     """
@@ -266,14 +343,8 @@ class StageTwo(arcade.View):
         # Call the parent class initializer
         super().__init__()
 
-        # Set the working directory (where we expect to find files) to the same
-        # directory this .py file is in. You can leave this out of your own
-        # code, but it is needed to easily run the examples using "python -m"
-        # as mentioned at the top of this program.
-        # file_path = os.path.dirname(os.path.abspath(__file__))
-        # os.chdir(file_path)
-
         self.game_over = False
+        self.success = False
 
         # Variables that will hold sprite lists
         self.player_list = None
@@ -291,20 +362,19 @@ class StageTwo(arcade.View):
         # Set the background color
         arcade.set_background_color(arcade.color.BALL_BLUE)
 
-
     def level_1(self):
         for i in range(30):
 
-            # Create the coin instance
+            # Create the patient instance
             patient = FallingPatient(
                 "patient.png", PATIENT_SCALING)
 
-            # Position the coin
+            # Position the patient
             patient.center_x = random.randrange(SCREEN_WIDTH)
             patient.center_y = random.randrange(
                 SCREEN_HEIGHT, SCREEN_HEIGHT * 2)
 
-            # Add the coin to the lists
+            # Add the patients to the lists
             self.patient_list.append(patient)
 
     def level_2(self):
@@ -332,8 +402,8 @@ class StageTwo(arcade.View):
         self.patient_list = arcade.SpriteList()
 
         # Set up the player
-        self.player_sprite = arcade.Sprite("bojo.png",
-                                           SPRITE_SCALING_PLAYER)
+        self.player_sprite = Player("bojo.png",
+                                    SPRITE_SCALING_PLAYER)
         self.player_sprite.center_x = 50
         self.player_sprite.center_y = 50
         self.player_list.append(self.player_sprite)
@@ -366,12 +436,12 @@ class StageTwo(arcade.View):
         if self.game_over:
             arcade.draw_text(output, 400, 300, arcade.color.RED, 50)
 
-    def on_mouse_motion(self, x, y, dx, dy):
-        """
-        Called whenever the mouse moves.
-        """
-        self.player_sprite.center_x = x
-        self.player_sprite.center_y = y
+        output = f"SUCCESS!\n Click to advance!"
+        if self.success:
+            arcade.draw_text(output,
+                            SCREEN_HEIGHT/2,
+                            SCREEN_WIDTH/2,
+                            arcade.color.BLUE, 15, anchor_x='center')
 
     def on_update(self, delta_time):
         """ Movement and game logic """
@@ -379,6 +449,7 @@ class StageTwo(arcade.View):
         # Call update on all sprites (The sprites don't do much in this
         # example though.)
         self.patient_list.update()
+        self.player_list.update()
 
         # Generate a list of all sprites that collided with the player.
         hit_list = arcade.check_for_collision_with_list(
@@ -402,13 +473,192 @@ class StageTwo(arcade.View):
             self.level += 1
             self.level_2()
 
+        elif self.score == 60 and self.level == 2:
+            self.success = True
+
+    def on_mouse_press(self, *args):
+        if self.success:
+            stage_three_view = StageThreeMenu()
+            self.window.show_view(stage_three_view)
+
+
+class StageThree(arcade.View):
+    """ Main application class. """
+
+    def __init__(self):
+        """ Initializer """
+        # Call the parent class initializer
+        super().__init__()
+
+        # Variables that will hold sprite lists
+        self.player_list = None
+        self.quorona_list = None
+        self.bullet_list = None
+
+        # Set up the player info
+        self.player_sprite = None
+        self.score = 0
+        self.game_over = False
+        self.success = False
+
+        # Don't show the mouse cursor
+        # self.set_mouse_visible(False)
+
+        # Load sounds. Sounds from kenney.nl
+        self.gun_sound = arcade.load_sound(":resources:sounds/hurt5.wav")
+        self.hit_sound = arcade.load_sound(":resources:sounds/hit5.wav")
+
+        arcade.set_background_color(arcade.color.AMAZON)
+
+    def setup(self):
+
+        """ Set up the game and initialize the variables. """
+
+        # Sprite lists
+        self.player_list = arcade.SpriteList()
+        self.quorona_list = arcade.SpriteList()
+        self.bullet_list = arcade.SpriteList()
+
+        # Set up the player
+        self.score = 0
+
+        # Image from kenney.nl
+        self.player_sprite = Player("bojo.png",
+                                    SPRITE_SCALING_PLAYER)
+        self.player_sprite.center_x = 50
+        self.player_sprite.center_y = 70
+        self.player_list.append(self.player_sprite)
+
+        # Create the coins
+        for i in range(ROLL_COUNT):
+
+            # Create the coin instance
+            # Coin image from kenney.nl
+            quorona = FallingPatient(":resources:images/enemies/saw.png", SPRITE_SCALING_QUORONA)
+            quorona.speed = 0.5
+
+            # Position the coin
+            quorona.center_x = random.randrange(SCREEN_WIDTH)
+            quorona.center_y = random.randrange(
+                SCREEN_HEIGHT, SCREEN_HEIGHT * 2)
+
+            # Add the coin to the lists
+            self.quorona_list.append(quorona)
+
+        # Set the background color
+        arcade.set_background_color(arcade.color.AMAZON)
+
+    def on_draw(self):
+        """
+        Render the screen.
+        """
+
+        # This command has to happen before we start drawing
+        arcade.start_render()
+
+        # Draw all the sprites.
+        self.quorona_list.draw()
+        self.bullet_list.draw()
+        self.player_list.draw()
+
+        # Render the text
+        arcade.draw_text(f"Score: {self.score}", 10, 20, arcade.color.WHITE, 14)
+
+        # Put the text on the screen.
+        output = f"GAME OVER"
+        if self.game_over:
+            arcade.draw_text(output, 400, 300, arcade.color.RED, 50)
+
+        if self.success:
+            output
+            arcade.draw_text(output, 400, 300, arcade.color.RED, 50)
+
+    def on_key_press(self, key, modifiers):
+        """Called whenever a key is pressed. """
+        if key == arcade.key.UP:
+            self.player_sprite.change_y = MOVEMENT_SPEED
+        elif key == arcade.key.DOWN:
+            self.player_sprite.change_y = -MOVEMENT_SPEED
+        elif key == arcade.key.LEFT:
+            self.player_sprite.change_x = -MOVEMENT_SPEED
+        elif key == arcade.key.RIGHT:
+            self.player_sprite.change_x = MOVEMENT_SPEED
+        elif key == arcade.key.SPACE:
+            # Gunshot sound
+            arcade.play_sound(self.gun_sound)
+            # Create a bullet
+            bullet = arcade.Sprite(":resources:images/space_shooter/laserBlue01.png", SPRITE_SCALING_LASER)
+
+            # The image points to the right, and we want it to point up. So
+            # rotate it.
+            bullet.angle = 90
+
+            # Give the bullet a speed
+            bullet.change_y = BULLET_SPEED
+
+            # Position the bullet
+            bullet.center_x = self.player_sprite.center_x
+            bullet.bottom = self.player_sprite.top
+
+            # Add the bullet to the appropriate lists
+            self.bullet_list.append(bullet)
+
+    def on_key_release(self, key, modifiers):
+        """Called when the user releases a key. """
+        if key == arcade.key.UP or key == arcade.key.DOWN:
+            self.player_sprite.change_y = 0
+        elif key == arcade.key.LEFT or key == arcade.key.RIGHT:
+            self.player_sprite.change_x = 0
+
+
+    def on_update(self, delta_time):
+        """ Movement and game logic """
+
+        # Call update on bullet sprites
+        self.bullet_list.update()
+        self.player_list.update()
+        self.quorona_list.update()
+        # Loop through each bullet
+        for bullet in self.bullet_list:
+            # TODO: create a Bullet Class and put this there
+            # Check this bullet to see if it hit a coin
+            hit_list = arcade.check_for_collision_with_list(bullet, self.quorona_list)
+
+            # If it did, get rid of the bullet
+            if len(hit_list) > 0:
+                bullet.remove_from_sprite_lists()
+
+            # For every coin we hit, add to the score and remove the coin
+            for quorona in hit_list:
+                quorona.remove_from_sprite_lists()
+                self.score += 1
+
+                # Hit Sound
+                arcade.play_sound(self.hit_sound)
+
+            # If the bullet flies off-screen, remove it.
+            if bullet.bottom > SCREEN_HEIGHT:
+                bullet.remove_from_sprite_lists()
+        
+        # Generate a list of all sprites that collided with the player.
+        hit_list = arcade.check_for_collision_with_list(
+            self.player_sprite, self.quorona_list)
+
+        # Loop through each colliding sprite, remove it, and add to the score.
+        infected = False
+        for quorona in self.quorona_list:
+            if quorona.avoided == True:
+                infected = True
+                quorona.remove_from_sprite_lists()
+
+        if hit_list or infected:
+            self.game_over = True
 
 def main():
     """ Main method """
     window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    start_view = StageTwoView()
+    start_view = StageTwoMenu()
     window.show_view(start_view)
-    # start_view.setup()
     arcade.run()
 
 
