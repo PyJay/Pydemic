@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='Qorona',
-    version='0.1dev',
+    version='0.1.1',
     packages=['qorona',],
     long_description=open('README.md').read(),
     install_requires=['arcade'],
