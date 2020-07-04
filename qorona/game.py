@@ -243,7 +243,7 @@ class Player(arcade.Sprite):
 
 
 class FallingPatient(arcade.Sprite):
-    """ Simple sprite that falls down """   
+    """ Simple sprite that falls down """ 
     speed = 2
 
     def update(self):
