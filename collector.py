@@ -24,7 +24,7 @@ class StageOneMenu(arcade.View):
     def on_draw(self):
         arcade.start_render()
         arcade.draw_text("Welcome! The year is 2020 and a virus\n"
-                         " from a distant land has reached your nation.\n"
+                         " from a distant land has reached your nation.\n\n"
                          "As leader of the United Queendom,\n"
                          " you must do your utmost to save the nation, Doris Johnson...", SCREEN_WIDTH /
                          2, SCREEN_HEIGHT/2,
@@ -43,13 +43,13 @@ class StageOneInstructionView(arcade.View):
 
     def on_draw(self):
         arcade.start_render()
-        arcade.draw_text("Use the arrow keys to collect 20 bog rolls in 30 seconds!", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
+        arcade.draw_text("Use the arrow keys to collect 20 bog rolls in 30 days!", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
                          arcade.color.BLACK, font_size=25, anchor_x="center")
         arcade.draw_text("Click to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
                          arcade.color.GRAY, font_size=20, anchor_x="center")
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
-        game_view = GameView()
+        game_view = StageOne()
         game_view.setup()
         self.window.show_view(game_view)
 
@@ -60,8 +60,8 @@ class StageTwoMenu(arcade.View):
 
     def on_draw(self):
         arcade.start_render()
-        arcade.draw_text("Well done! You stocked up on essentials.\n"
-                         "Alas quorona is spreading quickly.\n"
+        arcade.draw_text("Well done! You stocked up on essentials.\n\n"
+                         "Quorona is spreading quickly.\n"
                          "Doris, you have to attend several meetings\n"
                          " but you must maintain social distancing", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
                          arcade.color.WHITE, font_size=25, anchor_x="center")
@@ -96,8 +96,8 @@ class StageThreeMenu(arcade.View):
 
     def on_draw(self):
         arcade.start_render()
-        arcade.draw_text("You have tried your best to avoid people and attend meetings\n"
-                         "Unfortunately, you have still been infected.\n"
+        arcade.draw_text("You have tried your best to avoid people\n"
+                         "Alas, you have still been infected.\n"
                          "Doris, you must fight the disease\n"
                          " your nation depends on you", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
                          arcade.color.WHITE, font_size=25, anchor_x="center")
@@ -134,7 +134,8 @@ class StageThreeInstructionView(arcade.View):
 
     def on_draw(self):
         arcade.start_render()
-        arcade.draw_text("Use the left/right keys to move and space bar to shoot", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
+        arcade.draw_text("Use the arrow keys to move and space bar to shoot\n"
+        "Do not touch the virus or let it pass your defences.", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
                          arcade.color.BLACK, font_size=25, anchor_x="center")
         arcade.draw_text("Click to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
                          arcade.color.GRAY, font_size=20, anchor_x="center")
@@ -148,6 +149,8 @@ class StageThreeInstructionView(arcade.View):
 class SuccessView(arcade.View):
     def __init__(self, next_stage_view):
         super().__init__()
+        sound = arcade.load_sound(":resources:sounds/upgrade1.wav")
+        arcade.play_sound(sound)
         self.next_stage_menu = next_stage_view
 
     def on_show(self):
@@ -168,6 +171,11 @@ class SuccessView(arcade.View):
 class GameOverView(arcade.View):
     # TODO: you can reset variables in the init
     # TODO: you can add some context about where you were killed
+    def __init__(self):
+        sound = arcade.load_sound(":resources:sounds/gameover1.wav")
+        arcade.play_sound(sound)
+        super().__init__()
+
     def on_show(self):
         arcade.set_background_color(arcade.color.BLACK)
 
@@ -252,7 +260,7 @@ class StageBase(arcade.View):
             self.player_sprite.change_x = 0
 
 
-class GameView(StageBase):
+class StageOne(StageBase):
     """ Our custom Window Class"""
 
     def __init__(self):
@@ -269,6 +277,7 @@ class GameView(StageBase):
         self.score = 0
 
         self.time_left = 30
+        self.roll_collect_sound = arcade.load_sound(":resources:sounds/coin1.wav")
 
         # Don't show the mouse cursor
 
@@ -340,6 +349,7 @@ class GameView(StageBase):
         # Loop through each colliding sprite, remove it, and add to the score.
         for coin in coins_hit_list:
             coin.remove_from_sprite_lists()
+            arcade.play_sound(self.roll_collect_sound)
             self.score += 1
 
         self.time_left -= delta_time
@@ -370,6 +380,7 @@ class StageTwo(StageBase):
         self.score = 0
 
         self.level = 1
+        self.avoided_sound = arcade.load_sound(":resources:sounds/jump1.wav")
 
         # Don't show the mouse cursor
         # self.set_mouse_visible(False)
@@ -464,6 +475,7 @@ class StageTwo(StageBase):
         for patient in self.patient_list:
             if patient.avoided == True:
                 self.avoided_patients += 1
+                arcade.play_sound(self.avoided_sound)
                 self.score += 1
                 patient.remove_from_sprite_lists()
 
@@ -504,7 +516,6 @@ class StageThree(arcade.View):
         self.gun_sound = arcade.load_sound(":resources:sounds/hurt5.wav")
         self.hit_sound = arcade.load_sound(":resources:sounds/hit5.wav")
 
-        arcade.set_background_color(arcade.color.RUBY_RED)
 
     def setup(self):
         """ Set up the game and initialize the variables. """
@@ -542,7 +553,7 @@ class StageThree(arcade.View):
             self.quorona_list.append(quorona)
 
         # Set the background color
-        arcade.set_background_color(arcade.color.AMAZON)
+        arcade.set_background_color(arcade.color.CORAL_RED)
 
     def on_draw(self):
         """
@@ -646,7 +657,7 @@ class StageThree(arcade.View):
 def main():
     """ Main method """
     window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    start_view = StageOneMenu()
+    start_view = StageThreeMenu()
     window.show_view(start_view)
     arcade.run()
 
