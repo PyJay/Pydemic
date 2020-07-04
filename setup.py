@@ -10,5 +10,5 @@ setup(
         "console_scripts": [
             "qorona=qorona.game:main",
         ],},
-    package_data={'qorona': ['data/*.png']}
+    package_data={'qorona': ['data/*.png', 'data/*.mp3,]}
 )

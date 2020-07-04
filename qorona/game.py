@@ -5,7 +5,7 @@ import pkg_resources
 
 # --- Constants ---
 SPRITE_SCALING_PLAYER = 0.5
-SPRITE_SCALING_QORONA = 0.2
+SPRITE_SCALING_QORONA = 0.1
 SPRITE_SCALING_BOG_ROLL = 0.1
 SPRITE_SCALING_LASER = 0.8
 ROLL_COUNT = 25
@@ -19,14 +19,27 @@ SCREEN_TITLE = "Qorona"
 MOVEMENT_SPEED = 1.5
 
 bog_roll = pkg_resources.resource_filename("qorona", "data/bog_roll.png")
+virus_sprite = pkg_resources.resource_filename("qorona", "data/virus_sprite.png")
 dojo = ":resources:images/animated_characters/female_adventurer/femaleAdventurer_walk1.png"
+music = pkg_resources.resource_filename("qorona", "data/music.mp3")
 
-class StageOneMenu(arcade.View):
+# textures
+day = arcade.load_texture(pkg_resources.resource_filename("qorona", "data/day.png"))
+night = arcade.load_texture(pkg_resources.resource_filename("qorona", "data/night.png"))
+success = arcade.load_texture(pkg_resources.resource_filename("qorona", "data/success.png"))
+dystopia = arcade.load_texture(pkg_resources.resource_filename("qorona", "data/dystopia.png"))
+virus = arcade.load_texture(pkg_resources.resource_filename("qorona", "data/virus.png"))
+sunrise = arcade.load_texture(pkg_resources.resource_filename("qorona", "data/sunrise.png"))
+set_background = lambda texture: arcade.draw_lrwh_rectangle_textured(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, texture)
+
+class StageOneMenu(arcade.View):  
     def on_show(self):
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
 
     def on_draw(self):
         arcade.start_render()
+        set_background(night)
+
         arcade.draw_text("Welcome! The year is 2020 and a virus\n"
                          " from a distant land has reached your nation.\n\n"
                          "As leader of the United Queendom,\n"
@@ -34,11 +47,8 @@ class StageOneMenu(arcade.View):
                          2, SCREEN_HEIGHT/2,
                          arcade.color.WHITE, font_size=25, anchor_x="center")
         arcade.draw_text("..but first you need to stock up. Press Enter to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
-                         arcade.color.WHITE_SMOKE, font_size=20, anchor_x="center")
+                         arcade.color.WHITE, font_size=20, anchor_x="center")
 
-    # def on_mouse_press(self, _x, _y, _button, _modifiers):
-    #     instruction_view = StageOneInstructionView()
-    #     self.window.show_view(instruction_view)
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.ENTER:
@@ -69,13 +79,14 @@ class StageTwoMenu(arcade.View):
 
     def on_draw(self):
         arcade.start_render()
+        set_background(night)
         arcade.draw_text("Well done! You stocked up on essentials.\n\n"
                          "Qorona is spreading quickly.\n"
                          "Doris, you have to attend several meetings\n"
                          " but you must maintain social distancing", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
                          arcade.color.WHITE, font_size=25, anchor_x="center")
         arcade.draw_text("Press Enter to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
-                         arcade.color.WHITE_SMOKE, font_size=20, anchor_x="center")
+                         arcade.color.WHITE, font_size=20, anchor_x="center")
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.ENTER:
@@ -107,13 +118,14 @@ class StageThreeMenu(arcade.View):
 
     def on_draw(self):
         arcade.start_render()
+        set_background(night)
         arcade.draw_text("You have tried your best to avoid people\n"
                          "Alas, you have still been infected.\n"
                          "Doris, you must fight the disease\n"
                          " your nation depends on you", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
                          arcade.color.WHITE, font_size=25, anchor_x="center")
         arcade.draw_text("Press Enter to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
-                         arcade.color.WHITE_SMOKE, font_size=20, anchor_x="center")
+                         arcade.color.WHITE, font_size=20, anchor_x="center")
     
     def on_key_press(self, key, modifiers):
         if key == arcade.key.ENTER:
@@ -127,13 +139,14 @@ class FinalMenu(arcade.View):
 
     def on_draw(self):
         arcade.start_render()
+        set_background(sunrise)
         arcade.draw_text("You have fully recovered from the infection.\n"
                          "The rates have started to drop \n"
                          "and things are looking promising.\n"
                          "Congratulations Doris!", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
-                         arcade.color.WHITE, font_size=25, anchor_x="center")
+                         arcade.color.AZURE, font_size=25, anchor_x="center")
         arcade.draw_text("Press Enter to restart", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
-                         arcade.color.WHITE_SMOKE, font_size=20, anchor_x="center")
+                         arcade.color.AZURE, font_size=20, anchor_x="center")
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.ENTER:
@@ -171,10 +184,11 @@ class SuccessView(arcade.View):
 
     def on_draw(self):
         arcade.start_render()
+        set_background(success)
         arcade.draw_text("Success!", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
-                         arcade.color.WHITE, font_size=30, anchor_x="center")
+                         arcade.color.FOLLY, font_size=35, anchor_x="center")
         arcade.draw_text("Press Enter to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
-                         arcade.color.WHITE_SMOKE, font_size=20, anchor_x="center")
+                         arcade.color.FOLLY, font_size=30, anchor_x="center")
     
     def on_key_press(self, key, modifiers):
         if key == arcade.key.ENTER:
@@ -196,9 +210,11 @@ class GameOverView(arcade.View):
 
     def on_draw(self):
         arcade.start_render()
+        set_background(dystopia)
         arcade.draw_text("Game Over - you were infected", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
-                         arcade.color.WHITE, font_size=20, anchor_x="center")
-        arcade.draw_text("Press Enter to restart", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75, arcade.color.WHITE, 20)
+                         arcade.color.CANARY_YELLOW, font_size=35, anchor_x="center")
+        arcade.draw_text("Press Enter to restart",
+         SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75, arcade.color.CANARY_YELLOW, font_size=30, anchor_x="center")
         # TODO: show scores here
    
     def on_key_press(self, key, modifiers):
@@ -302,7 +318,6 @@ class StageOne(StageBase):
     def setup(self):
         """ Set up the game and initialize the variables. """
         # self.window.set_mouse_visible(False)
-
         # Sprite lists
         self.player_list = arcade.SpriteList()
         self.coin_list = arcade.SpriteList()
@@ -335,6 +350,7 @@ class StageOne(StageBase):
     def on_draw(self):
         """ Draw everything """
         arcade.start_render()
+        set_background(day)
         self.coin_list.draw()
         self.player_list.draw()
 
@@ -349,7 +365,7 @@ class StageOne(StageBase):
 
         # Put the text on the screen.
         output = f"Score: {self.score}"
-        arcade.draw_text(output, 10, 20, arcade.color.WHITE, 14)
+        arcade.draw_text(output, 10, 20, arcade.color.BLACK, 14)
 
     def on_update(self, delta_time):
         """ Movement and game logic """
@@ -461,6 +477,7 @@ class StageTwo(StageBase):
 
         # This command has to happen before we start drawing
         arcade.start_render()
+        set_background(day)
 
         # Draw all the sprites.
         self.player_sprite.draw()
@@ -468,10 +485,10 @@ class StageTwo(StageBase):
 
         # Put the text on the screen.
         output = f"Score: {self.score}"
-        arcade.draw_text(output, 10, 20, arcade.color.WHITE, 15)
+        arcade.draw_text(output, 10, 20, arcade.color.BLACK, 15)
 
         output = f"Level: {self.level}"
-        arcade.draw_text(output, 10, 35, arcade.color.WHITE, 15)
+        arcade.draw_text(output, 10, 35, arcade.color.BLACK, 15)
 
     def on_update(self, delta_time):
         """ Movement and game logic """
@@ -557,7 +574,7 @@ class StageThree(arcade.View):
             # Create the coin instance
             # Coin image from kenney.nl
             Qorona = FallingPatient(
-                ":resources:images/enemies/saw.png", SPRITE_SCALING_QORONA)
+                virus_sprite, SPRITE_SCALING_QORONA)
             Qorona.speed = 0.5
 
             # Position the coin
@@ -578,7 +595,7 @@ class StageThree(arcade.View):
 
         # This command has to happen before we start drawing
         arcade.start_render()
-
+        set_background(virus)
         # Draw all the sprites.
         self.Qorona_list.draw()
         self.bullet_list.draw()
@@ -669,10 +686,20 @@ class StageThree(arcade.View):
         if self.score >= 30:
             self.window.show_view(SuccessView(FinalMenu))
 
+class GameWindow(arcade.Window):
+
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.music = arcade.Sound(music, streaming=True)
+    
+    def setup(self):
+        self.music.play(volume=0.1)
+
 
 def main():
     """ Main method """
-    window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+    window = GameWindow(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+    window.setup()
     start_view = StageOneMenu()
     window.show_view(start_view)
     arcade.run()
