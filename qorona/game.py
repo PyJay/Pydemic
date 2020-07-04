@@ -18,7 +18,7 @@ SCREEN_TITLE = "Qorona"
 
 MOVEMENT_SPEED = 1.5
 
-bog_roll = pkg_resources.resource_filename("qorontine", "data/bog_roll.png")
+bog_roll = pkg_resources.resource_filename("qorona", "data/bog_roll.png")
 dojo = ":resources:images/animated_characters/female_adventurer/femaleAdventurer_walk1.png"
 
 class StageOneMenu(arcade.View):
@@ -33,13 +33,17 @@ class StageOneMenu(arcade.View):
                          " you must do your utmost to save the nation, Doris Johnson...", SCREEN_WIDTH /
                          2, SCREEN_HEIGHT/2,
                          arcade.color.WHITE, font_size=25, anchor_x="center")
-        arcade.draw_text("..but first you need to stock up. Click to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
+        arcade.draw_text("..but first you need to stock up. Press Enter to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
                          arcade.color.WHITE_SMOKE, font_size=20, anchor_x="center")
 
-    def on_mouse_press(self, _x, _y, _button, _modifiers):
-        instruction_view = StageOneInstructionView()
-        self.window.show_view(instruction_view)
+    # def on_mouse_press(self, _x, _y, _button, _modifiers):
+    #     instruction_view = StageOneInstructionView()
+    #     self.window.show_view(instruction_view)
 
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.ENTER:
+            instruction_view = StageOneInstructionView()
+            self.window.show_view(instruction_view)
 
 class StageOneInstructionView(arcade.View):
     def on_show(self):
@@ -49,13 +53,14 @@ class StageOneInstructionView(arcade.View):
         arcade.start_render()
         arcade.draw_text("Use the arrow keys to collect 20 bog rolls in 30 days!", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
                          arcade.color.BLACK, font_size=25, anchor_x="center")
-        arcade.draw_text("Click to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
+        arcade.draw_text("Press Enter to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
                          arcade.color.GRAY, font_size=20, anchor_x="center")
-
-    def on_mouse_press(self, _x, _y, _button, _modifiers):
-        game_view = StageOne()
-        game_view.setup()
-        self.window.show_view(game_view)
+   
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.ENTER:
+            game_view = StageOne()
+            game_view.setup()
+            self.window.show_view(game_view)
 
 
 class StageTwoMenu(arcade.View):
@@ -69,12 +74,13 @@ class StageTwoMenu(arcade.View):
                          "Doris, you have to attend several meetings\n"
                          " but you must maintain social distancing", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
                          arcade.color.WHITE, font_size=25, anchor_x="center")
-        arcade.draw_text("Click to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
+        arcade.draw_text("Press Enter to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
                          arcade.color.WHITE_SMOKE, font_size=20, anchor_x="center")
 
-    def on_mouse_press(self, _x, _y, _button, _modifiers):
-        instruction_view = StageTwoInstructionView()
-        self.window.show_view(instruction_view)
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.ENTER:
+            instruction_view = StageTwoInstructionView()
+            self.window.show_view(instruction_view)
 
 
 class StageTwoInstructionView(arcade.View):
@@ -85,13 +91,14 @@ class StageTwoInstructionView(arcade.View):
         arcade.start_render()
         arcade.draw_text("Use the arrow keys to avoid the infected!", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
                          arcade.color.BLACK, font_size=25, anchor_x="center")
-        arcade.draw_text("Click to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
+        arcade.draw_text("Press Enter to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
                          arcade.color.GRAY, font_size=20, anchor_x="center")
-
-    def on_mouse_press(self, _x, _y, _button, _modifiers):
-        game_view = StageTwo()
-        game_view.setup()
-        self.window.show_view(game_view)
+    
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.ENTER:
+            game_view = StageTwo()
+            game_view.setup()
+            self.window.show_view(game_view)
 
 
 class StageThreeMenu(arcade.View):
@@ -105,12 +112,13 @@ class StageThreeMenu(arcade.View):
                          "Doris, you must fight the disease\n"
                          " your nation depends on you", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
                          arcade.color.WHITE, font_size=25, anchor_x="center")
-        arcade.draw_text("Click to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
+        arcade.draw_text("Press Enter to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
                          arcade.color.WHITE_SMOKE, font_size=20, anchor_x="center")
-
-    def on_mouse_press(self, _x, _y, _button, _modifiers):
-        instruction_view = StageThreeInstructionView()
-        self.window.show_view(instruction_view)
+    
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.ENTER:
+            instruction_view = StageThreeInstructionView()
+            self.window.show_view(instruction_view)
 
 
 class FinalMenu(arcade.View):
@@ -124,13 +132,13 @@ class FinalMenu(arcade.View):
                          "and things are looking promising.\n"
                          "Congratulations Doris!", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
                          arcade.color.WHITE, font_size=25, anchor_x="center")
-        arcade.draw_text("Click to restart", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
+        arcade.draw_text("Press Enter to restart", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
                          arcade.color.WHITE_SMOKE, font_size=20, anchor_x="center")
 
-    def on_mouse_press(self, _x, _y, _button, _modifiers):
-        instruction_view = StageOneMenu()
-        self.window.show_view(instruction_view)
-
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.ENTER:
+            instruction_view = StageOneMenu()
+            self.window.show_view(instruction_view)
 
 class StageThreeInstructionView(arcade.View):
     def on_show(self):
@@ -141,13 +149,14 @@ class StageThreeInstructionView(arcade.View):
         arcade.draw_text("Use the arrow keys to move and space bar to shoot\n"
         "Do not touch the virus or let it pass your defences.", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
                          arcade.color.BLACK, font_size=25, anchor_x="center")
-        arcade.draw_text("Click to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
+        arcade.draw_text("Press Enter to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
                          arcade.color.GRAY, font_size=20, anchor_x="center")
 
-    def on_mouse_press(self, _x, _y, _button, _modifiers):
-        game_view = StageThree()
-        game_view.setup()
-        self.window.show_view(game_view)
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.ENTER:
+            game_view = StageThree()
+            game_view.setup()
+            self.window.show_view(game_view)
 
 
 class SuccessView(arcade.View):
@@ -164,12 +173,14 @@ class SuccessView(arcade.View):
         arcade.start_render()
         arcade.draw_text("Success!", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
                          arcade.color.WHITE, font_size=30, anchor_x="center")
-        arcade.draw_text("Click to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
+        arcade.draw_text("Press Enter to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
                          arcade.color.WHITE_SMOKE, font_size=20, anchor_x="center")
-
-    def on_mouse_press(self, _x, _y, _button, _modifiers):
-        next_stage_menu = self.next_stage_menu()
-        self.window.show_view(next_stage_menu)
+    
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.ENTER:
+            next_stage_menu = self.next_stage_menu()
+            self.window.show_view(next_stage_menu)
+    
 
 
 class GameOverView(arcade.View):
@@ -187,12 +198,13 @@ class GameOverView(arcade.View):
         arcade.start_render()
         arcade.draw_text("Game Over - you were infected", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
                          arcade.color.WHITE, font_size=20, anchor_x="center")
-        arcade.draw_text("Click to restart", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75, arcade.color.WHITE, 20)
+        arcade.draw_text("Press Enter to restart", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75, arcade.color.WHITE, 20)
         # TODO: show scores here
-
-    def on_mouse_press(self, _x, _y, _button, _modifiers):
-        game_view = StageOneMenu()
-        self.window.show_view(game_view)
+   
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.ENTER:
+            game_view = StageOneMenu()
+            self.window.show_view(game_view)
 
 # Sprite Players
 

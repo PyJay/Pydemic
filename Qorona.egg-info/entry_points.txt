@@ -1,0 +1,3 @@
+[console_scripts]
+qorona = qorona.game:main
+
