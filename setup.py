@@ -8,5 +8,5 @@ setup(
     entry_points={
         "console_scripts": [
             "qorontine=qorontine.game:main",
-        ],
+        ],}
 )
