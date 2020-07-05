@@ -705,7 +705,7 @@ def main():
     """ Main method """
     window = GameWindow(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     window.setup()
-    start_view = stage_three_menu()
+    start_view = stage_one_menu()
     window.show_view(start_view)
     arcade.run()
 
