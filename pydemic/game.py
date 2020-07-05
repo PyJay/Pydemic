@@ -620,7 +620,7 @@ class StageThree(StageBase):
             self.window.show_view(GameOverView())
 
         if self.score >= 30:
-            self.window.show_view(SuccessView(FinalMenu()))
+            self.window.show_view(SuccessView(FinalMenu))
 
 
 class GameWindow(arcade.Window):
@@ -684,7 +684,7 @@ def main():
     """ Main method """
     window = GameWindow(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     window.setup()
-    start_view = stage_one_menu()
+    start_view = stage_three_menu()
     window.show_view(start_view)
     arcade.run()
 
