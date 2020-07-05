@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='Pydemic',
-    version='0.1.3',
+    version='0.1.4',
     packages=['pydemic',],
     long_description=open('README.md').read(),
     install_requires=['arcade'],
