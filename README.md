@@ -1,4 +1,4 @@
-# Qorona
+# Epydemic
 
 Doris' Queendom has been hit by a virus from a distant land.
 She must do whatever it takes to protect her nation...
