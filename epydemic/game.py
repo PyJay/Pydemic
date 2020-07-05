@@ -5,7 +5,7 @@ import pkg_resources
 
 # --- Constants ---
 SPRITE_SCALING_PLAYER = 0.5
-SPRITE_SCALING_QORONA = 0.1
+SPRITE_SCALING_VIRUS = 0.1
 SPRITE_SCALING_BOG_ROLL = 0.1
 SPRITE_SCALING_LASER = 0.8
 ROLL_COUNT = 25
@@ -14,22 +14,25 @@ BULLET_SPEED = 5
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
-SCREEN_TITLE = "Qorona"
+SCREEN_TITLE = "Epydemic"
 
 MOVEMENT_SPEED = 1.5
 
-bog_roll = pkg_resources.resource_filename("qorona", "data/bog_roll.png")
-virus_sprite = pkg_resources.resource_filename("qorona", "data/virus_sprite.png")
+# sprites
+bog_roll = pkg_resources.resource_filename("epydemic", "data/bog_roll.png")
+virus_sprite = pkg_resources.resource_filename("epydemic", "data/virus_sprite.png")
 dojo = ":resources:images/animated_characters/female_adventurer/femaleAdventurer_walk1.png"
-music = pkg_resources.resource_filename("qorona", "data/music.mp3")
+
+# music
+music = pkg_resources.resource_filename("epydemic", "data/music.mp3")
 
 # textures
-day = arcade.load_texture(pkg_resources.resource_filename("qorona", "data/day.png"))
-night = arcade.load_texture(pkg_resources.resource_filename("qorona", "data/night.png"))
-success = arcade.load_texture(pkg_resources.resource_filename("qorona", "data/success.png"))
-dystopia = arcade.load_texture(pkg_resources.resource_filename("qorona", "data/dystopia.png"))
-virus = arcade.load_texture(pkg_resources.resource_filename("qorona", "data/virus.png"))
-sunrise = arcade.load_texture(pkg_resources.resource_filename("qorona", "data/sunrise.png"))
+day = arcade.load_texture(pkg_resources.resource_filename("epydemic", "data/day.png"))
+night = arcade.load_texture(pkg_resources.resource_filename("epydemic", "data/night.png"))
+success = arcade.load_texture(pkg_resources.resource_filename("epydemic", "data/success.png"))
+dystopia = arcade.load_texture(pkg_resources.resource_filename("epydemic", "data/dystopia.png"))
+virus = arcade.load_texture(pkg_resources.resource_filename("epydemic", "data/virus.png"))
+sunrise = arcade.load_texture(pkg_resources.resource_filename("epydemic", "data/sunrise.png"))
 set_background = lambda texture: arcade.draw_lrwh_rectangle_textured(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, texture)
 
 class StageOneMenu(arcade.View):  
@@ -81,7 +84,7 @@ class StageTwoMenu(arcade.View):
         arcade.start_render()
         set_background(night)
         arcade.draw_text("Well done! You stocked up on essentials.\n\n"
-                         "Qorona is spreading quickly.\n"
+                         "An epydemic is spreading quickly.\n"
                          "Doris, you have to attend several meetings\n"
                          " but you must maintain social distancing", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
                          arcade.color.WHITE, font_size=25, anchor_x="center")
@@ -247,7 +250,7 @@ class FallingPatient(arcade.Sprite):
     speed = 2
 
     def update(self):
-        """ Move the coin """
+        """ Move the enemy """
         self.avoided = False
         # Fall down
         self.center_y -= self.speed
@@ -261,7 +264,7 @@ class RisingPatient(arcade.Sprite):
     """ Simple sprite that falls up """
 
     def update(self):
-        """ Move the coin """
+        """ Move the enemy """
         self.avoided = False
         # Move up
         self.center_y += 2.5
@@ -302,7 +305,7 @@ class StageOne(StageBase):
 
         # Variables that will hold sprite lists
         self.player_list = None
-        self.coin_list = None
+        self.roll_list = None
 
         # Set up the player info
         self.player_sprite = None
@@ -320,7 +323,7 @@ class StageOne(StageBase):
         # self.window.set_mouse_visible(False)
         # Sprite lists
         self.player_list = arcade.SpriteList()
-        self.coin_list = arcade.SpriteList()
+        self.roll_list = arcade.SpriteList()
 
         # Score
         self.score = 0
@@ -333,25 +336,24 @@ class StageOne(StageBase):
         self.player_sprite.center_y = 50
         self.player_list.append(self.player_sprite)
 
-        # Create the coins
+        # Create the rolls
         for _ in range(ROLL_COUNT):
-            # Create the coin instance
-            # Coin image from kenney.nl
-            coin = arcade.Sprite(bog_roll,
+            # Create the roll instance
+            roll = arcade.Sprite(bog_roll,
                                  SPRITE_SCALING_BOG_ROLL)
 
-            # Position the coin
-            coin.center_x = random.randrange(SCREEN_WIDTH)
-            coin.center_y = random.randrange(SCREEN_HEIGHT)
+            # Position the roll
+            roll.center_x = random.randrange(SCREEN_WIDTH)
+            roll.center_y = random.randrange(SCREEN_HEIGHT)
 
-            # Add the coin to the lists
-            self.coin_list.append(coin)
+            # Add the roll to the lists
+            self.roll_list.append(roll)
 
     def on_draw(self):
         """ Draw everything """
         arcade.start_render()
         set_background(day)
-        self.coin_list.draw()
+        self.roll_list.draw()
         self.player_list.draw()
 
         # Calculate seconds by using a modulus (remainder)
@@ -372,15 +374,15 @@ class StageOne(StageBase):
 
         # Call update on all sprites (The sprites don't do much in this
         # example though.)
-        self.coin_list.update()
+        self.roll_list.update()
         self.player_list.update()
         # Generate a list of all sprites that collided with the player.
-        coins_hit_list = arcade.check_for_collision_with_list(
-            self.player_sprite, self.coin_list)
+        roll_hit_list = arcade.check_for_collision_with_list(
+            self.player_sprite, self.roll_list)
 
         # Loop through each colliding sprite, remove it, and add to the score.
-        for coin in coins_hit_list:
-            coin.remove_from_sprite_lists()
+        for roll in roll_hit_list:
+            roll.remove_from_sprite_lists()
             arcade.play_sound(self.roll_collect_sound)
             self.score += 1
 
@@ -438,15 +440,15 @@ class StageTwo(StageBase):
     def level_2(self):
         for i in range(30):
 
-            # Create the coin instance
+            # Create the enemy instance
             patient = RisingPatient(
                 ":resources:images/animated_characters/zombie/zombie_walk0.png", PATIENT_SCALING)
 
-            # Position the coin
+            # Position the enemy
             patient.center_x = random.randrange(SCREEN_WIDTH)
             patient.center_y = random.randrange(-SCREEN_HEIGHT, 0)
 
-            # Add the coin to the lists
+            # Add the enemy to the lists
             self.patient_list.append(patient)
 
     def setup(self):
@@ -535,7 +537,7 @@ class StageThree(arcade.View):
 
         # Variables that will hold sprite lists
         self.player_list = None
-        self.Qorona_list = None
+        self.virus_list = None
         self.bullet_list = None
 
         # Set up the player info
@@ -555,7 +557,7 @@ class StageThree(arcade.View):
 
         # Sprite lists
         self.player_list = arcade.SpriteList()
-        self.Qorona_list = arcade.SpriteList()
+        self.virus_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
 
         # Set up the player
@@ -568,22 +570,21 @@ class StageThree(arcade.View):
         self.player_sprite.center_y = 70
         self.player_list.append(self.player_sprite)
 
-        # Create the coins
+        # Create the enemies
         for i in range(30):
 
-            # Create the coin instance
-            # Coin image from kenney.nl
-            Qorona = FallingPatient(
-                virus_sprite, SPRITE_SCALING_QORONA)
-            Qorona.speed = 0.5
+            # Create the enemy instance
+            virus = FallingPatient(
+                virus_sprite, SPRITE_SCALING_VIRUS)
+            virus.speed = 0.5
 
-            # Position the coin
-            Qorona.center_x = random.randrange(SCREEN_WIDTH)
-            Qorona.center_y = random.randrange(
+            # Position the enemy
+            virus.center_x = random.randrange(SCREEN_WIDTH)
+            virus.center_y = random.randrange(
                 SCREEN_HEIGHT, SCREEN_HEIGHT * 2)
 
-            # Add the coin to the lists
-            self.Qorona_list.append(Qorona)
+            # Add the enemy to the lists
+            self.virus_list.append(virus)
 
         # Set the background color
         arcade.set_background_color(arcade.color.CORAL_RED)
@@ -597,7 +598,7 @@ class StageThree(arcade.View):
         arcade.start_render()
         set_background(virus)
         # Draw all the sprites.
-        self.Qorona_list.draw()
+        self.virus_list.draw()
         self.bullet_list.draw()
         self.player_list.draw()
 
@@ -645,21 +646,21 @@ class StageThree(arcade.View):
         # Call update on bullet sprites
         self.bullet_list.update()
         self.player_list.update()
-        self.Qorona_list.update()
+        self.virus_list.update()
         # Loop through each bullet
         for bullet in self.bullet_list:
             # TODO: create a Bullet Class and put this there
-            # Check this bullet to see if it hit a coin
+            # Check this bullet to see if it hit a virus
             hit_list = arcade.check_for_collision_with_list(
-                bullet, self.Qorona_list)
+                bullet, self.virus_list)
 
             # If it did, get rid of the bullet
             if len(hit_list) > 0:
                 bullet.remove_from_sprite_lists()
 
-            # For every coin we hit, add to the score and remove the coin
-            for Qorona in hit_list:
-                Qorona.remove_from_sprite_lists()
+            # For every virus we hit, add to the score and remove the virus
+            for virus in hit_list:
+                virus.remove_from_sprite_lists()
                 self.score += 1
 
                 # Hit Sound
@@ -671,14 +672,14 @@ class StageThree(arcade.View):
 
         # Generate a list of all sprites that collided with the player.
         hit_list = arcade.check_for_collision_with_list(
-            self.player_sprite, self.Qorona_list)
+            self.player_sprite, self.virus_list)
 
         # Loop through each colliding sprite, remove it, and add to the score.
         infected = False
-        for Qorona in self.Qorona_list:
-            if Qorona.avoided == True:
+        for virus in self.virus_list:
+            if virus.avoided == True:
                 infected = True
-                Qorona.remove_from_sprite_lists()
+                virus.remove_from_sprite_lists()
 
         if hit_list or infected:
             self.window.show_view(GameOverView())
