@@ -178,7 +178,19 @@ class GameOverView(arcade.View):
 # Sprite Players
 class Player(arcade.Sprite):
 
-    def update(self):
+    def update(self, up_pressed, down_pressed, left_pressed, right_pressed):
+        self.change_x = 0
+        self.change_y = 0
+
+        if up_pressed and not down_pressed:
+            self.change_y = MOVEMENT_SPEED
+        elif down_pressed and not up_pressed:
+            self.change_y = -MOVEMENT_SPEED
+        if left_pressed and not right_pressed:
+            self.change_x = -MOVEMENT_SPEED
+        elif right_pressed and not left_pressed:
+            self.change_x = MOVEMENT_SPEED
+
         self.center_x += self.change_x
         self.center_y += self.change_y
 
@@ -191,7 +203,6 @@ class Player(arcade.Sprite):
             self.bottom = 0
         elif self.top > SCREEN_HEIGHT - 1:
             self.top = SCREEN_HEIGHT - 1
-
 
 class FallingPatient(arcade.Sprite):
     """ Simple sprite that falls down """
@@ -223,24 +234,34 @@ class RisingPatient(arcade.Sprite):
 
 
 class StageBase(arcade.View):
+    def __init__(self):
+        super().__init__()
+        self.left_pressed = False
+        self.right_pressed = False
+        self.up_pressed = False
+        self.down_pressed = False
+
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed. """
 
         if key == arcade.key.UP:
-            self.player_sprite.change_y = MOVEMENT_SPEED
+            self.up_pressed = True
         elif key == arcade.key.DOWN:
-            self.player_sprite.change_y = -MOVEMENT_SPEED
+            self.down_pressed = True
         elif key == arcade.key.LEFT:
-            self.player_sprite.change_x = -MOVEMENT_SPEED
+            self.left_pressed = True
         elif key == arcade.key.RIGHT:
-            self.player_sprite.change_x = MOVEMENT_SPEED
+            self.right_pressed = True
 
     def on_key_release(self, key, modifiers):
-        """Called when the user releases a key. """
-        if key == arcade.key.UP or key == arcade.key.DOWN:
-            self.player_sprite.change_y = 0
-        elif key == arcade.key.LEFT or key == arcade.key.RIGHT:
-            self.player_sprite.change_x = 0
+        if key == arcade.key.UP:
+            self.up_pressed = False
+        elif key == arcade.key.DOWN:
+            self.down_pressed = False
+        elif key == arcade.key.LEFT:
+            self.left_pressed = False
+        elif key == arcade.key.RIGHT:
+            self.right_pressed = False
 
 
 class StageOne(StageBase):
@@ -325,7 +346,7 @@ class StageOne(StageBase):
         # Call update on all sprites (The sprites don't do much in this
         # example though.)
         self.roll_list.update()
-        self.player_list.update()
+        self.player_sprite.update(self.up_pressed, self.down_pressed, self.left_pressed, self.right_pressed)
         # Generate a list of all sprites that collided with the player.
         roll_hit_list = arcade.check_for_collision_with_list(
             self.player_sprite, self.roll_list)
@@ -448,7 +469,7 @@ class StageTwo(StageBase):
         # Call update on all sprites (The sprites don't do much in this
         # example though.)
         self.patient_list.update()
-        self.player_list.update()
+        self.player_sprite.update(self.up_pressed, self.down_pressed, self.left_pressed, self.right_pressed)
 
         # Generate a list of all sprites that collided with the player.
         hit_list = arcade.check_for_collision_with_list(
@@ -580,7 +601,7 @@ class StageThree(StageBase):
 
         # Call update on bullet sprites
         self.bullet_list.update()
-        self.player_list.update()
+        self.player_sprite.update(self.up_pressed, self.down_pressed, self.left_pressed, self.right_pressed)
         self.virus_list.update()
         # Loop through each bullet
         for bullet in self.bullet_list:
