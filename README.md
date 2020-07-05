@@ -5,9 +5,9 @@ She must do whatever it takes to protect her nation...
 
 # Installation
 Using pip install:
-`pip install git+https://github.com/PyJay/Qorona`
+`pip install git+https://github.com/PyJay/Epydemic`
 
 Run the game:
-`qorona.exe`
+`epydemic`
 
 Enjoy!
