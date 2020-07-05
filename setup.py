@@ -1,14 +1,14 @@
 from setuptools import setup
 
 setup(
-    name='Qorona',
+    name='Epydemic',
     version='0.1.1',
-    packages=['qorona',],
+    packages=['epydemic',],
     long_description=open('README.md').read(),
     install_requires=['arcade'],
     entry_points={
         "console_scripts": [
-            "qorona=qorona.game:main",
+            "epydemic=epydemic.game:main",
         ],},
-    package_data={'qorona': ['data/*.png', 'data/*.mp3']}
+    package_data={'epydemic': ['data/*.png', 'data/*.mp3']}
 )
