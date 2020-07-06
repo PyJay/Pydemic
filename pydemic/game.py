@@ -477,7 +477,7 @@ class StageTwo(StageBase):
             self.level_2()
 
         elif self.score == 60 and self.level == 2:
-            self.window.show_view(SuccessView(StageThreeInstructions))
+            self.window.show_view(SuccessView(StageThreeMenu))
 
 
 class StageThree(StageBase):
